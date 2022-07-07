@@ -1,0 +1,47 @@
+pipeline:
+    name: Demo for Kroger
+    identifier: Demo_for_Kroger
+    projectIdentifier: kapil_digani_test
+    orgIdentifier: aaaorg
+    tags: {}
+    stages:
+        - stage:
+              name: Approval
+              identifier: Approval
+              description: ""
+              type: Approval
+              spec:
+                  execution:
+                      steps:
+                          - step:
+                                type: ShellScript
+                                name: Echo
+                                identifier: Echo
+                                spec:
+                                    shell: Bash
+                                    onDelegate: true
+                                    source:
+                                        type: Inline
+                                        spec:
+                                            script: echo "Hello from main branch"
+                                    environmentVariables: []
+                                    outputVariables: []
+                                    executionTarget: {}
+                                timeout: 10m
+                          - step:
+                                name: Approvers
+                                identifier: Approvers
+                                type: HarnessApproval
+                                timeout: 1d
+                                spec:
+                                    approvalMessage: |-
+                                        Please review the following information
+                                        and approve the pipeline progression
+                                    includePipelineExecutionHistory: true
+                                    approvers:
+                                        minimumCount: 1
+                                        disallowPipelineExecutor: false
+                                        userGroups:
+                                            - account.Approvers
+                                    approverInputs: []
+              tags: {}
